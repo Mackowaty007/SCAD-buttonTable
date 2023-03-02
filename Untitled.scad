@@ -1,11 +1,13 @@
-panelWidth = 200;//mm
-panelHeight = 90;//mm
+panelWidth = 150;//mm
+panelHeight = 100;//mm
 screwDiameter = 2;
 roundEdgesRadious = 5;//set to zero to disable
 
 border = 10;
 gridSize = 25;
 
+numberOfGridsInARowX = 3;
+numberOfGridsInARowY = 7;
 
 module roundEdges(){
     translate([roundEdgesRadious,roundEdgesRadious,-1]){
@@ -21,7 +23,7 @@ module screwHole(){
     cylinder(25,screwDiameter,screwDiameter,center=true);
 }
 module switch(){
-    translate([0,0,-18]) cube([20,13,25]);
+    translate([-20/2,-13/2,-18]) cube([20,13,25]);
 }
 module SSD(){//seven segment display
     
@@ -43,21 +45,12 @@ difference(){
     translate([panelHeight-border/2,border/2,0]) screwHole();
     translate([panelHeight-border/2,panelWidth-border/2,0]) screwHole();
     //all of the other holes
-    numberOfGridsInARowX = round(panelHeight/gridSize);
-    numberOfGridsInARowY = round(panelWidth/gridSize);
-    //hack (round up numbers down)
-    if (numberOfGridsInARowX - panelHeight/gridSize > 1){
-        numberOfGridsInARowX = numberOfGridsInARowX - 1;
-    }
-    if (numberOfGridsInARowY - panelWidth/gridSize > 1){
-        numberOfGridsInARowY = numberOfGridsInARowY - 1;
-    }
-    //debug
-    echo (numberOfGridsInARowX);
-    //                ||          complicated shit                                                          ||
-    for(x = [border : /*((panelHeight-border*2)-numberOfGridsInARowX*gridSize)/numberOfGridsInARowX */gridSize  : panelHeight-border]){
-        for(y = [border : ((panelWidth-border*2)-numberOfGridsInARowY*gridSize)/numberOfGridsInARowY + gridSize : panelWidth-border]){
-            #translate([x,y,0]) aGrid();
+    for(x=[0:1:numberOfGridsInARowX-1]){
+        for(y = [0:1:numberOfGridsInARowY-1]){
+            #translate([
+            border+x*(gridSize+((panelHeight-border*2)-(numberOfGridsInARowX*gridSize))/(numberOfGridsInARowX-1))+gridSize/2,
+            border+y*(gridSize+((panelWidth -border*2)-(numberOfGridsInARowY*gridSize))/(numberOfGridsInARowY-1))+gridSize/2,
+            0]) switch();
         }
     }
 }
