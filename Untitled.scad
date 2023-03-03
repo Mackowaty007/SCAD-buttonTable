@@ -141,12 +141,12 @@ if(labelsEnabled==true){
          for(y = [0:1:numberOfGridsInARowY-1]){
              if(map[x][y]!=0){
                 translate([
-                    border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2-gridSizeX*(55/100),
+                    border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2-gridSizeX*(44/100),
                     border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
                     panelThicknes/2])
                rotate([0,0,90])
                linear_extrude(panelThicknes)
-               text(text = labelMap[x][y], size = textSize,halign="center",valign="top");
+               text(text = labelMap[x][y], size = textSize,halign="center",valign="bottom");
              }
         }
     }
