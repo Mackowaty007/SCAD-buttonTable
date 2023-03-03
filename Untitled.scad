@@ -1,7 +1,7 @@
-$fn = 100;//detail level
+$fn = 25;//detail level
 
 panelWidth = 140;//mm
-panelHeight = 100;//mm
+panelHeight = 110;//mm
 panelThicknes = 3;//mm
 screwDiameter = 2;
 roundEdgesRadious = 5;//set to zero to disable
@@ -9,7 +9,9 @@ roundEdgesRadious = 5;//set to zero to disable
 border = 10;
 gridSizeX = 30;
 gridSizeY = 30;
+
 textSize = 5;
+labelsEnabled = true;
 
 numberOfGridsInARowX = 3;
 numberOfGridsInARowY = 4;
@@ -23,9 +25,14 @@ numberOfGridsInARowY = 4;
 69- debug cube grid size
 */
 map = [
-[ 2, 2, 2, 2],
+[ 1, 2, 2, 2],
 [ 7, 7, 3, 3],
 [47, 0, 1, 1]
+];
+labelMap = [
+["battery","engine","gear","other"],
+["wpn","othr","cam","soi"],
+["speed"," ","test","test"]
 ];
 
 module roundEdges(){
@@ -65,6 +72,7 @@ module aGrid(){
 }
 
 difference(){
+    color("green")
     cube([panelHeight,panelWidth,panelThicknes]);
     //round edges
     roundEdges();
@@ -127,14 +135,19 @@ difference(){
     }
 }
 
-//signatures
-for(x=[0:1:numberOfGridsInARowX-1]){
-     for(y = [0:1:numberOfGridsInARowY-1]){
-       translate([
-                border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
-                border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,0])
-       linear_extrude(4)
-       color("blue")
-       text("text", size = textSize);
+//labels
+if(labelsEnabled==true){
+    for(x=[0:1:numberOfGridsInARowX-1]){
+         for(y = [0:1:numberOfGridsInARowY-1]){
+             if(map[x][y]!=0){
+                translate([
+                    border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2-gridSizeX*(55/100),
+                    border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
+                    panelThicknes/2])
+               rotate([0,0,90])
+               linear_extrude(panelThicknes)
+               text(text = labelMap[x][y], size = textSize,halign="center",valign="top");
+             }
+        }
     }
 }
