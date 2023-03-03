@@ -12,6 +12,7 @@ gridSizeY = 30;
 
 textSize = 5;
 labelsEnabled = true;
+isLabelPositive = true;
 
 numberOfGridsInARowX = 3;
 numberOfGridsInARowY = 4;
@@ -20,19 +21,28 @@ numberOfGridsInARowY = 4;
 1 - a switch
 2 - a double switch
 3 - a joystick
+4 - a potentiometer
+5 - small buttons in a group
+6 - LED
+26- double LED
+36- tripple LED
+46- quadruple LED
+56- qintiple? LED
+66- hex LED
+86- octo LED?
 7 - 7 segment display
 47- 4x 7 segment display (requires a empty space on the right
 69- debug cube grid size
 */
 map = [
 [ 1, 2, 2, 2],
-[ 7, 7, 3, 3],
-[47, 0, 1, 1]
+[47, 0, 3, 3],
+[ 7, 5, 6, 4]
 ];
 labelMap = [
-["battery","engine","gear","other"],
-["wpn","othr","cam","soi"],
-["speed"," ","test","test"]
+["battery","engines","gear","other"],
+["speed"," ","cam","soi"],
+["sel","autopilot","LED","power"]
 ];
 
 module roundEdges(){
@@ -58,7 +68,23 @@ module doubleSwitch(){
 module joystick(){
     translate([0,0,2]) cylinder(10,25/2,25/2,center=true);
 }
+module potentiometer(){
+    cylinder(10,6/2,6/2,center=true);
+}
 module bigButton(){}
+module smallButtons(){
+    distanceBetweenButtons = 8;
+    for(x=[-distanceBetweenButtons:distanceBetweenButtons:distanceBetweenButtons]){
+        for(y=[-distanceBetweenButtons:distanceBetweenButtons:distanceBetweenButtons]){
+            translate([x,y,0])
+            cube([6,6,10],center=true);
+        }
+    }
+}
+
+module LED(){
+    cylinder(10,5/2,5/2,center=true);
+}
 module SSD(){//seven segment display
     cube([17.5,12.4,20],center=true);
 }
@@ -67,8 +93,66 @@ module X4SSD(){//seven segment display
 }
 module LCD2inch(){}
 module LCD1c3inch(){}
-module aGrid(){
+module aGrid(){//for debug purpouses
     translate([-gridSizeX/2,-gridSizeY/2,-1]) cube([gridSizeX,gridSizeY,10]);
+}
+
+module labels(){
+    if(labelsEnabled==true){
+        for(x=[0:1:numberOfGridsInARowX-1]){
+             for(y = [0:1:numberOfGridsInARowY-1]){
+                 if(map[x][y]==0){}
+                 
+                 translate([
+                        border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2-gridSizeX/2,
+                        border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
+                        panelThicknes/2])
+                 rotate([0,0,90]){
+                     if(map[x][y]==1||map[x][y]==2){
+                        translate([0,-1,0])
+                        linear_extrude(panelThicknes)
+                        text(text = labelMap[x][y], size = textSize,halign="center",valign="center");
+                     }  
+                     
+                     if(map[x][y]==3){
+                        translate([0,0,0])
+                        linear_extrude(panelThicknes)
+                        text(text = labelMap[x][y], size = textSize,halign="center",valign="center");
+                     }
+                     
+                     if(map[x][y]==4){
+                        translate([0,-8,0])
+                        linear_extrude(panelThicknes)
+                        text(text = labelMap[x][y], size = textSize,halign="center",valign="center");
+                     }  
+                     
+                     if(map[x][y]==5){
+                        translate([0,0,0])
+                        linear_extrude(panelThicknes)
+                        text(text = labelMap[x][y], size = textSize,halign="center",valign="center");
+                     } 
+                     
+                     if(map[x][y]==6||map[x][y]==26||map[x][y]==36||map[x][y]==46){
+                        translate([0,-8,0])
+                        linear_extrude(panelThicknes)
+                        text(text = labelMap[x][y], size = textSize,halign="center",valign="center");
+                     } 
+                     
+                     if(map[x][y]==7){
+                        translate([0,-2,0])
+                        linear_extrude(panelThicknes)
+                        text(text = labelMap[x][y], size = textSize,halign="center",valign="center");
+                     }  
+                     
+                     if(map[x][y]==47){
+                        translate([gridSizeX/2,-1,0])
+                        linear_extrude(panelThicknes)
+                        text(text = labelMap[x][y], size = textSize,halign="center",valign="center");
+                     }  
+                }
+            }
+        }
+    }
 }
 
 difference(){
@@ -90,64 +174,56 @@ difference(){
         for(y = [0:1:numberOfGridsInARowY-1]){
             if(map[x][y]==0){}
             
-            if(map[x][y]==1){
-                #translate([
+            translate([
                 border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
                 border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
-                0]) switch();
-            }
-            
-            if(map[x][y]==2){
-                #translate([
-                border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
-                border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
-                0]) doubleSwitch();
-            }
-            
-            if(map[x][y]==3){
-                #translate([
-                border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
-                border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
-                0]) joystick();
-            }
-            
-            if(map[x][y]==7){
-                #translate([
-                border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
-                border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
-                0]) SSD();
-            }
-            
-            if(map[x][y]==47){
-                #translate([
-                border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
-                border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
-                0]) X4SSD();
-            }
-            
-            if(map[x][y]==69){//debugTile
-                #translate([
-                border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
-                border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
-                0]) aGrid();
+                0]){
+                if(map[x][y]==1){
+                    switch();
+                }
+                
+                if(map[x][y]==2){
+                    doubleSwitch();
+                }
+                
+                if(map[x][y]==3){//joystick
+                    joystick();
+                }
+                
+                if(map[x][y]==4){//potentiometer
+                    potentiometer();
+                }
+                
+                if(map[x][y]==5){//small buttons
+                    smallButtons();
+                }
+                
+                if(map[x][y]==6){//LED
+                    LED();
+                }
+                
+                if(map[x][y]==7){//seven segment
+                    SSD();
+                }
+                
+                if(map[x][y]==47){//4x seven segment
+                    X4SSD();
+                }
+                
+                if(map[x][y]==69){//debugTile
+                    #aGrid();
+                }
             }
         }
+    }
+    
+    //make negative labels
+    if (isLabelPositive==false){
+        labels();
     }
 }
 
-//labels
-if(labelsEnabled==true){
-    for(x=[0:1:numberOfGridsInARowX-1]){
-         for(y = [0:1:numberOfGridsInARowY-1]){
-             if(map[x][y]!=0){
-                translate([
-                    border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2-gridSizeX*(44/100),
-                    border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
-                    panelThicknes/2])
-               rotate([0,0,90])
-               linear_extrude(panelThicknes)
-               text(text = labelMap[x][y], size = textSize,halign="center",valign="bottom");
-             }
-        }
-    }
+//make labels
+if (isLabelPositive==true){
+    labels();
 }
