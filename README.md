@@ -1,5 +1,7 @@
 # SCAD-buttonTable
 This project uses SCAD to generate a 3D model of a panel with a lot of buttons, switches, potentiometers,joysticks, displays etc.
+<li>example:
+<img src="photos/example.jpg"></img>
 
 ## How to modify?
 Just change the variables on the top of the file.
