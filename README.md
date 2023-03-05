@@ -24,3 +24,6 @@ Just change the variables on the top of the file.
 
 ## How to export?
 in OpenSCAD press F6 to render the panel. This may take a while because OpenSCAD is really slow. Then pres F7 to export it as a STL file.
+
+## How to put in the parts?
+All of the holes are the same size as the parts. That means they are gonna sit there without any glue, using only friction. If you have any problems fitting something in, take a knife or anything sharp and scrape the edges from the bottom. 
