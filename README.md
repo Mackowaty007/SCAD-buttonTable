@@ -21,3 +21,6 @@ Just change the variables on the top of the file.
 <li> map - tells the program where to put all of the components. Just play with it and figure it out
 <li> labelMap - should be the same size as the "map" variable. Tells the program how to label each cell. The first thing in the "map" array corresponds to the first thing in the "labelMap"
 </ul>
+
+## How to export?
+in OpenSCAD press F6 to render the panel. This may take a while because OpenSCAD is really slow. Then pres F7 to export it as a STL file.
