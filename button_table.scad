@@ -4,6 +4,13 @@ panelWidth = 140;//mm
 panelHeight = 110;//mm
 panelThicknes = 3;//mm
 screwDiameter = 3.2;
+screwHeight = 15.5;
+/*
+screw types:
+-woodScrew
+-normal
+*/
+screwType = "woodScrew";
 roundCornerRadious = 5;//set to zero to disable
 
 border = 5;
@@ -12,7 +19,7 @@ gridSizeY = 30;
 
 textSize = 5;
 labelsEnabled = true;
-isLabelPositive = false;
+isLabelPositive = true;
 
 numberOfGridsInARowX = 3;
 numberOfGridsInARowY = 4;
@@ -57,7 +64,12 @@ module roundEdges(){
     }
 }
 module screwHole(){
-    cylinder(25,screwDiameter/2,screwDiameter/2,center=true);
+    translate([0,0,-screwHeight/2])
+    #cylinder(screwHeight,screwDiameter/2,screwDiameter/2,center=true);
+    if (screwType=="woodScrew"){
+        translate([0,0,0])
+        #cylinder(3.1,screwDiameter/2,screwDiameter);
+    }
 }
 module switch(){
     translate([-20/2,-13/2,-18]) cube([20,13,25]);
@@ -70,7 +82,12 @@ module joystick(){
     translate([0,0,2]) cylinder(10,25/2,25/2,center=true);
 }
 module potentiometer(){
-    cylinder(10,6/2,6/2,center=true);
+    cylinder(10,6.6/2,6.6/2,center=true);
+    for (i=[0:100/$fn:90]){
+        rotate([0,0,i])
+        translate([0,1.2/2-11.7+6.6/2,-panelThicknes/2+2-(i/90)*(panelThicknes/4)])
+        #cube([2.6,1.2,panelThicknes],center = true);
+    }
 }
 module bigButton(){}
 module smallButtons(){
@@ -87,7 +104,7 @@ module LED(){
     cylinder(10,5/2,5/2,center=true);
 }
 module SSD(){//seven segment display
-    cube([17.5,12.4,20],center=true);
+    cube([17.55,12.4,20],center=true);
 }
 module X4SSD(){//seven segment display
     translate([-19/2,-50.4/2+gridSizeY/2,-12]) cube([19,50.4,20]);
@@ -157,6 +174,7 @@ module labels(){
 }
 
 difference(){
+    //main
     color("green")
     cube([panelHeight,panelWidth,panelThicknes]);
     //round edges
@@ -170,7 +188,6 @@ difference(){
     translate([panelHeight-border,border,0]) screwHole();
     translate([panelHeight-border,panelWidth-border,0]) screwHole();
     //all of the other holes
-    echo ("works");
     for(x=[0:1:numberOfGridsInARowX-1]){
         for(y = [0:1:numberOfGridsInARowY-1]){
             if(map[x][y]==0){}
