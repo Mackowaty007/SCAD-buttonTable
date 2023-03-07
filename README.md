@@ -27,3 +27,7 @@ in OpenSCAD press F6 to render the panel. This may take a while because OpenSCAD
 
 ## How to put in the parts?
 All of the holes are the same size as the parts. That means they are gonna sit there without any glue, using only friction. If you have any problems fitting something in, take a knife or anything sharp and scrape the edges from the bottom. 
+
+## How to wire it up?
+if you have a lot of buttons or switches you can wire them up into a grid. It might look intimidating but it's accualy quite simple.
+<img src="photos/howIWiredItUp.jpg"></img>
