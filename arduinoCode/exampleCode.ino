@@ -1,5 +1,8 @@
 const int outputPins[3] = {2,3,4};
-const int inputPins [6] = {5,6,7,8,9,10};
+const int inputPins [6] = {5,6,7,8,9,16};
+const int joy1Pins [3] = {A3,A2,13};
+const int joy2Pins [3] = {A1,A0,15};
+const int potentiometerPin = A10;
 
 void setup() {
   Serial.begin(9600);
@@ -15,6 +18,19 @@ void setup() {
 }
 
 void loop() {
+  //check the potentiometers
+  Serial.print("joystick 1 X: ");
+  Serial.print(analogRead(joy1Pins[0]));
+  Serial.print(" Y: ");
+  Serial.println(analogRead(joy1Pins[1]));
+  Serial.print(" joystick 2 X: ");
+  Serial.print(analogRead(joy2Pins[0]));
+  Serial.print(" Y: ");
+  Serial.println(analogRead(joy2Pins[1]));
+  Serial.print(" potentiometer: ");
+  Serial.println(analogRead(potentiometerPin));
+  
+  //check the grid
   for (int i=0;i<sizeof(outputPins) / sizeof(int);i++){
     //SET OUTPUT PIN STATUS
     if(i==0){
