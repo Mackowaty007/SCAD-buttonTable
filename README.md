@@ -31,3 +31,10 @@ All of the holes are the same size as the parts. That means they are gonna sit t
 ## How to wire it up?
 if you have a lot of buttons or switches you can wire them up into a grid. It might look intimidating but it's accualy quite simple.
 <img src="photos/howIWiredItUp.jpg"></img>
+
+## Suported modules
+<li>x/y joystick: <img src="photos/joystick.jpg">
+<li>7 segment display: <img src="photos/sevenSegment.jpg">
+<li>potentiometer: <img src="photos/potentiometer.jpg">
+<li>switch 15x21mm: <img src="photos/switch.jpg">
+<li>small buttons: <img src="photos/smallButtons.jpg">
