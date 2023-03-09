@@ -3,12 +3,19 @@ $fn = 100;//detail level
 panelWidth = 140;//mm
 panelHeight = 110;//mm
 wallThicknes = 1.2;//mm
+panelThicknes = 3;//mm
 height = 35;
 
-screwDiameter = 3.2;
+//joystick support 
+joystickSupport = true;
+joystickScrewHeight = 15;
+joystickScrewDiameter = 3.2;
+howMuchShouldTheJoystickStandOut = 12.6;
+
+
 screwHeight = 15.5;
 roundCornerRadious = 5;//set to zero to disable
-border = 5;
+
 
 /*
 locations for the usb port
@@ -18,6 +25,45 @@ left
 right
 */
 usbLocation = "left";
+
+//copy this from the button_table.scad file
+border = 5;
+gridSizeX = 30;
+gridSizeY = 30;
+screwDiameter = 3.2;
+numberOfGridsInARowX = 3;
+numberOfGridsInARowY = 4;
+map = [
+[ 1, 2, 2, 2],
+[47, 0, 3, 3],
+[ 7, 5, 6, 4]
+];
+
+
+    module joystickScrewHole(){
+        translate([0,0,-joystickScrewHeight/2])
+        #cylinder(joystickScrewHeight,joystickScrewDiameter/2,joystickScrewDiameter/2,center=true);
+    }
+    module joystickStand(){
+        baseWidth = 26.1;
+        baseHeight= 34.1;
+        rotate([0,0,270])
+        translate([-baseWidth/2,-baseHeight/2,-(height+panelThicknes-(32.5-howMuchShouldTheJoystickStandOut)-wallThicknes)])
+        difference(){
+        translate([0,0,-(height+panelThicknes-(32.5-howMuchShouldTheJoystickStandOut)-wallThicknes)])
+        cube([baseWidth,baseHeight,height+panelThicknes-(32.5-howMuchShouldTheJoystickStandOut)-wallThicknes]);
+        
+        //screw holes
+        translate([2+joystickScrewDiameter/2,1+joystickScrewDiameter/2,0.01])
+        joystickScrewHole();
+        translate([2+joystickScrewDiameter/2,baseHeight-3.7-joystickScrewDiameter/2,0.01])
+        joystickScrewHole();
+        translate([baseWidth-2-joystickScrewDiameter/2,1+joystickScrewDiameter/2,0.01])
+        joystickScrewHole();
+        translate([baseWidth-2-joystickScrewDiameter/2,baseHeight-3.7-joystickScrewDiameter/2,0.01])
+        joystickScrewHole();
+        }
+}
 
 module roundEdges(){
     translate([roundCornerRadious,roundCornerRadious,-height-1]){
@@ -93,3 +139,23 @@ difference(){
         usbPort();
     }
 }
+
+if(joystickSupport==true){
+    for(x=[0:1:numberOfGridsInARowX-1]){
+        for(y = [0:1:numberOfGridsInARowY-1]){
+            if(map[x][y]==0){}
+                
+            translate([
+                border+x*(gridSizeX+((panelHeight-border*2)-(numberOfGridsInARowX*gridSizeX))/(numberOfGridsInARowX-1))+gridSizeX/2,
+                border+y*(gridSizeY+((panelWidth -border*2)-(numberOfGridsInARowY*gridSizeY))/(numberOfGridsInARowY-1))+gridSizeY/2,
+                0]){
+
+               if(map[x][y]==3){//joystick
+                    joystickStand();
+               }
+            }
+        }
+    }
+}
+
+
