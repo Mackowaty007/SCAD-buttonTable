@@ -82,12 +82,9 @@ module joystick(){
     translate([0,0,2]) cylinder(10,25/2,25/2,center=true);
 }
 module potentiometer(){
-    cylinder(10,6.6/2,6.6/2,center=true);
-    for (i=[0:100/$fn:90]){
-        rotate([0,0,i])
-        translate([0,1.2/2-11.7+6.6/2,-panelThicknes/2+2-(i/90)*(panelThicknes/4)])
-        #cube([2.6,1.2,panelThicknes],center = true);
-    }
+    cylinder(10,7/2,7/2,center=true);
+    translate([0,1.2/2-11.7+7/2,panelThicknes/2-1])
+    cube([2.6,1.3,panelThicknes],center = true);
 }
 module bigButton(){}
 module smallButtons(){
